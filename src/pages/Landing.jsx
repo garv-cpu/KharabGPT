@@ -40,7 +40,7 @@ export default function Landing() {
     // Send to backend for AI analysis
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/api/analyze", {
+      const res = await fetch("https://kharabgpt-backend.onrender.com/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image: dataURL })
@@ -83,7 +83,7 @@ export default function Landing() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}>
-          <img src="/assets/forkai-hero.png" alt="Fork AI App Preview" className="w-full rounded-2xl shadow-xl" />
+          <img src="/ChatGPT Image Jul 8, 2025, 10_44_32 PM.png" alt="Fork AI App Preview" className="w-full rounded-2xl shadow-xl" />
         </motion.div>
       </section>
 
