@@ -52,7 +52,7 @@ export default function App() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3001/api/chat", {
+      const res = await fetch("https://kharabgpt-backend.onrender.com/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: [...messages, userMsg] }),
@@ -75,8 +75,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#0d1117] text-white flex flex-col">
       <header className="text-center py-6">
-        <h1 className="text-4xl font-bold text-green-400">🇮🇳 BharatGPT</h1>
-        <p className="text-gray-400">Chat smarter. Chat like Bharat.</p>
+        <h1 className="text-4xl font-bold text-red-400">Kharab GPT</h1>
       </header>
 
       <main className="flex-1 overflow-y-auto px-4 pb-28 space-y-3">
