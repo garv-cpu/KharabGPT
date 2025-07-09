@@ -23,36 +23,45 @@ export default function Landing() {
     if (videoRef.current) videoRef.current.srcObject = stream;
   };
 
-  const handleCapture = async () => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (!video || !canvas) return;
-    const ctx = canvas.getContext("2d");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0);
-    const dataURL = canvas.toDataURL("image/png");
-    setImageURL(dataURL);
-    const updated = [dataURL, ...scans];
-    setScans(updated);
-    localStorage.setItem("forkai-scans", JSON.stringify(updated));
+ const handleCapture = async () => {
+  const video = videoRef.current;
+  const canvas = canvasRef.current;
+  if (!video || !canvas) return;
+  const ctx = canvas.getContext("2d");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  ctx.drawImage(video, 0, 0);
+  const dataURL = canvas.toDataURL("image/jpeg"); // Gemini supports JPEG best
+  setImageURL(dataURL);
 
-    // Send to backend for AI analysis
-    setLoading(true);
-    try {
-      const res = await fetch("https://kharabgpt-backend.onrender.com/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: dataURL })
-      });
-      const data = await res.json();
-      setAiResult(data.result);
-    } catch (err) {
-      setAiResult("Failed to analyze image. Try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const updated = [dataURL, ...scans];
+  setScans(updated);
+  localStorage.setItem("forkai-scans", JSON.stringify(updated));
+
+  // Extract base64 without prefix
+  const base64 = dataURL.replace(/^data:image\/\w+;base64,/, "");
+
+  setLoading(true);
+  try {
+    const res = await fetch("https://kharabgpt-backend.onrender.com/api/gemini-vision", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        base64Image: base64,
+        userGoal: "weight loss" // optional: make this user input later
+      })
+    });
+
+    const data = await res.json();
+    setAiResult(data.result || "No result from AI.");
+  } catch (err) {
+    console.error(err);
+    setAiResult("❌ Failed to analyze image. Try again later.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleDeleteScan = (idxToDelete) => {
     const updated = scans.filter((_, idx) => idx !== idxToDelete);
