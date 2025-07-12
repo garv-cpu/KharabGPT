@@ -111,9 +111,6 @@ export default function Landing() {
             <Button size="base" onClick={handleStartCamera}>
               <Camera className="mr-2 w-5 h-5" /> Open Camera
             </Button>
-            <Button size="base">
-              Try Fork AI <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
           </div>
         </motion.div>
 
@@ -270,9 +267,6 @@ export default function Landing() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <Button size="lg" className="text-base sm:text-lg px-8 py-4">
-            Get Started with Fork AI <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
         </motion.div>
       </section>
     </div>
