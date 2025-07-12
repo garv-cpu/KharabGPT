@@ -19,13 +19,25 @@ export default function Landing() {
 
   const handleStartCamera = async () => {
     setShowCamera(true);
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: { exact: "environment" },
-      },
-    });
-
-    if (videoRef.current) videoRef.current.srcObject = stream;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { exact: "environment" }, // 🔁 Request back camera
+        },
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error("Could not access back camera, falling back:", err);
+      // Fallback to any camera if back camera fails
+      const fallbackStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = fallbackStream;
+      }
+    }
   };
 
   const handleCapture = async () => {
